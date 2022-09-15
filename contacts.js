@@ -7,53 +7,37 @@ const { stringify } = require("querystring");
 const contactsPath = join(__dirname, "db/contacts.json");
 
 const listContacts = async () => {
-  try {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
-    return contacts;
-  } catch (error) {
-    console.log(error.message);
-  }
+  const data = await fs.readFile(contactsPath);
+  const contacts = JSON.parse(data);
+  return contacts;
 };
 
 const getContactById = async (contactId) => {
-  try {
-    const contacts = await listContacts();
-    const contact = contacts.find(({ id }) => contactId === id);
+  const contacts = await listContacts();
+  const contact = contacts.find(({ id }) => contactId === id);
 
-    if (!contact) return null;
-    
-    return contact;
-  } catch (error) {
-    console.log(error.message);
-  }
+  if (!contact) return null;
+
+  return contact;
 };
 
 const addContact = async (name, email, phone) => {
-  try {
-    const contacts = await listContacts();
-    const newContact = { id: v4(), name, email, phone };
-    contacts.push(newContact);
+  const contacts = await listContacts();
+  const newContact = { id: v4(), name, email, phone };
+  contacts.push(newContact);
 
-    updateContacts(contacts, contactsPath);
-    return newContact;
-  } catch (error) {
-    console.log(error.message);
-  }
+  updateContacts(contacts, contactsPath);
+  return newContact;
 };
 
 const removeContact = async (contactId) => {
-  try {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(({ id }) => contactId === id);
-    if (index === -1) return null;
+  const contacts = await listContacts();
+  const index = contacts.findIndex(({ id }) => contactId === id);
+  if (index === -1) return null;
 
-    const [deletedContact] = contacts.splice(index, 1);
-    updateContacts(contacts, contactsPath);
-    return deletedContact;
-  } catch (error) {
-    console.log(error.message);
-  }
+  const [deletedContact] = contacts.splice(index, 1);
+  updateContacts(contacts, contactsPath);
+  return deletedContact;
 };
 
 module.exports = {
